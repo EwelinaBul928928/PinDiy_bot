@@ -1,1 +1,3 @@
-# ...existing code config.properties.example...
+pindiy.login=your_username
+pindiy.password=your_password
+pindiy.comment=Wow, love this pattern! Thanks for sharing <3

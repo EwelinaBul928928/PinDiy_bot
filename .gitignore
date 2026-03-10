@@ -1,1 +1,21 @@
-# ...existing code .gitignore...
+# Maven build output
+target/
+
+# IDE files
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# Config with credentials (never commit!)
+config.properties
+
+# Bot profile (Chrome user data)
+bot-profile/
+
+# Logi bota – lokalnie na Twoim komputerze
+data/
+
+# macOS
+.DS_Store
