@@ -29,4 +29,8 @@ public class Config {
     public static String get(String key) {
         return props.getProperty(key);
     }
+
+    public static String getOrDefault(String key, String defaultValue) {
+        return props.getProperty(key, defaultValue);
+    }
 }

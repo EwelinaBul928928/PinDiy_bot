@@ -1,3 +1,10 @@
 pindiy.login=your_username
 pindiy.password=your_password
 pindiy.comment=Wow, love this pattern! Thanks for sharing <3
+
+# Google Gemini API key – free (1500 req/dzień)
+# Rejestracja: https://aistudio.google.com → "Get API key"
+gemini.api_key=AIza...
+
+# (Optional) Override default forum URL
+# pindiy.forum_url=https://www.pindiy.com/forum-CrochetPR-1.html

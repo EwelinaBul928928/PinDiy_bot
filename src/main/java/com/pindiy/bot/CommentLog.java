@@ -6,11 +6,13 @@ import java.nio.file.*;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommentLog {
 
     private static final Path LOG_FILE       = Paths.get("data", "commented-threads.csv");
-    private static final Path BLACKLIST_FILE = Paths.get("blacklist.txt");
+    private static final Path BLACKLIST_FILE = Paths.get("data", "blacklist.txt");
     private static final long COOLDOWN_MS    = 50_000;
 
     private final Set<String> commented  = new HashSet<>();
@@ -30,7 +32,7 @@ public class CommentLog {
                     if (line.isBlank() || line.startsWith("#") || line.startsWith("commented_at")) continue;
                     String[] parts = line.split(";", -1);
                     if (parts.length >= 2) {
-                        log.commented.add(parts[1].trim());
+                        log.commented.add(normalize(parts[1].trim()));
                         try {
                             long ts = Instant.parse(parts[0].trim()).toEpochMilli();
                             if (ts > log.lastCommentEpochMs) log.lastCommentEpochMs = ts;
@@ -63,7 +65,13 @@ public class CommentLog {
     }
 
     public boolean alreadyCommented(String url) {
-        return commented.contains(url);
+        return commented.contains(normalize(url));
+    }
+
+    // Wyciąga "thread-XXXXXX" jako klucz – niezależnie od numeru strony/posta w URL
+    public static String normalize(String url) {
+        Matcher m = Pattern.compile("thread-(\\d+)").matcher(url);
+        return m.find() ? "thread-" + m.group(1) : url;
     }
 
     public boolean isBlacklisted(String url) {
@@ -74,7 +82,7 @@ public class CommentLog {
     }
 
     public void record(String url, String title) {
-        commented.add(url);
+        commented.add(normalize(url));
         lastCommentEpochMs = System.currentTimeMillis();
         try {
             Files.createDirectories(LOG_FILE.getParent());
